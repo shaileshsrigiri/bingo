@@ -18,9 +18,10 @@ app.prepare().then(() => {
 
   const io = new Server(server, {
     cors: {
-      origin: process.env.NEXT_PUBLIC_SOCKET_URL || 'http://localhost:3000',
+      origin: '*',
       methods: ['GET', 'POST'],
     },
+    transports: ['websocket', 'polling'],
   });
 
   io.on('connection', (socket) => {

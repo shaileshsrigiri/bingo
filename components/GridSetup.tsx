@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { getSocket } from '@/lib/socket';
+import { initSocket, getSocket } from '@/lib/socket';
 
 interface GridSetupProps {
   gameId: string;
@@ -39,8 +39,13 @@ export default function GridSetup({ gameId, playerId }: GridSetupProps) {
       gridMatrix.push(numbers.slice(i * 5, (i + 1) * 5));
     }
 
-    const socket = getSocket();
-    socket?.emit('set_grid', gameId, gridMatrix, (response: any) => {
+    const socket = initSocket();
+    if (!socket) {
+      alert('Failed to connect to server');
+      return;
+    }
+
+    socket.emit('set_grid', gameId, gridMatrix, (response: any) => {
       setSubmitted(true);
     });
   };

@@ -35,10 +35,10 @@ export default function GameBoard({ gameState, gameId, playerId }: GameBoardProp
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-6xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           {/* My Board */}
-          <div className="bg-white rounded-lg shadow-lg p-4">
+          <div className="bg-white rounded-lg shadow-lg p-4 lg:col-span-1">
             <h2 className="text-xl font-bold text-gray-800 mb-2">Your Board</h2>
             <p className="text-xs text-gray-600 mb-3">{myPlayer.name}</p>
 
@@ -131,48 +131,11 @@ export default function GameBoard({ gameState, gameId, playerId }: GameBoardProp
             )}
           </div>
 
-          {/* Opponent Board */}
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Opponent</h2>
-            <p className="text-xs text-gray-600 mb-3">{opponent.name}</p>
-
-            {/* BINGO Progress */}
-            <div className="flex gap-1 mb-3 justify-center">
-              {BINGO.map((letter, idx) => (
-                <div
-                  key={idx}
-                  className={`w-8 h-8 flex items-center justify-center rounded font-bold text-xs transition-all ${
-                    opponent.bingoLetters[idx]
-                      ? 'bg-green-500 text-white'
-                      : 'bg-gray-300 text-gray-600'
-                  }`}
-                >
-                  {letter}
-                </div>
-              ))}
-            </div>
-
-            {/* Read-Only Grid */}
-            <div className="grid grid-cols-5 gap-1 mb-4">
-              {opponent.grid.map((row: number[], i: number) =>
-                row.map((num: number, j: number) => (
-                  <div
-                    key={`${i}-${j}`}
-                    className={`h-10 rounded font-bold text-xs flex items-center justify-center transition-all ${
-                      opponent.marked[i][j]
-                        ? 'bg-green-500 text-white line-through'
-                        : 'bg-gray-200 text-gray-700'
-                    }`}
-                  >
-                    {num}
-                  </div>
-                ))
-              )}
-            </div>
-
-            <div className="text-xs text-gray-600 text-center">
-              Lines: {opponent.completedLines.length}/5
-            </div>
+          {/* Right Side - Hidden (Suspense!) */}
+          <div className="hidden lg:block bg-white rounded-lg shadow-lg p-4">
+            <p className="text-center text-gray-600 font-semibold">🤐</p>
+            <p className="text-center text-gray-500 text-sm mt-4">Their board is hidden...</p>
+            <p className="text-center text-gray-500 text-sm">Good luck! 🍀</p>
           </div>
         </div>
       </div>

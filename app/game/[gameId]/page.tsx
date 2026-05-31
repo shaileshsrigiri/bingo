@@ -20,7 +20,7 @@ export default function GamePage() {
     const socket = initSocket();
 
     // Get player ID from localStorage or create new one
-    const storedPlayerId = localStorage.getItem('playerId') || socket.id;
+    const storedPlayerId = localStorage.getItem('playerId') || socket.id || 'player-' + Math.random().toString(36).substr(2, 9);
     setPlayerId(storedPlayerId);
     localStorage.setItem('playerId', storedPlayerId);
 
@@ -34,15 +34,15 @@ export default function GamePage() {
       setGameStatus('playing');
     });
 
-    socket.on('number_called', (data) => {
-      setGameState(prev => {
+    socket.on('number_called', (data: any) => {
+      setGameState((prev: any) => {
         if (!prev) return prev;
         return { ...prev, lastCalledNumber: data.number };
       });
     });
 
-    socket.on('line_completed', (data) => {
-      setGameState(prev => {
+    socket.on('line_completed', (data: any) => {
+      setGameState((prev: any) => {
         if (!prev) return prev;
         const updatedState = { ...prev };
         if (updatedState.player1.id === data.playerId) {

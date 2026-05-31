@@ -35,12 +35,12 @@ export default function GameBoard({ gameState, gameId, playerId }: GameBoardProp
 
   return (
     <div className="min-h-screen bg-gray-100 p-4">
-      <div className="max-w-4xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* My Board */}
-          <div className="bg-white rounded-lg shadow-lg p-4 lg:col-span-1">
-            <h2 className="text-xl font-bold text-gray-800 mb-2">Your Board</h2>
-            <p className="text-xs text-gray-600 mb-3">{myPlayer.name}</p>
+          <div className="bg-white rounded-lg shadow-lg p-4">
+            <h2 className="text-xl font-bold text-gray-800 mb-1">Your Board</h2>
+            <p className="text-sm text-gray-600 mb-3 font-semibold">👤 {myPlayer.name}</p>
 
             {/* BINGO Progress */}
             <div className="flex gap-1 mb-3 justify-center">
@@ -90,37 +90,40 @@ export default function GameBoard({ gameState, gameId, playerId }: GameBoardProp
             </button>
           </div>
 
-          {/* Center - Current Turn and Number Pad */}
-          <div className="bg-white rounded-lg shadow-lg p-4">
-            <div className="text-center mb-4">
-              <p className={`text-lg font-bold ${isCurrentPlayer ? 'text-green-600' : 'text-blue-600'}`}>
-                {isCurrentPlayer ? 'YOUR TURN' : "OPPONENT'S TURN"}
+          {/* Center & Right - Current Turn and Number Pad */}
+          <div className="bg-white rounded-lg shadow-lg p-4 lg:col-span-1">
+            {/* Turn Indicator */}
+            <div className="text-center mb-4 pb-4 border-b-2 border-gray-200">
+              <p className={`text-2xl font-bold mb-2 ${isCurrentPlayer ? 'text-green-600' : 'text-blue-600'}`}>
+                {isCurrentPlayer ? '🎯 YOUR TURN' : "⏳ OPPONENT'S TURN"}
               </p>
-              <p className="text-xs text-gray-600 mt-1">{currentPlayer.name}</p>
+              <p className="text-sm text-gray-600">{currentPlayer.name}</p>
             </div>
 
+            {/* Last Called Number - Large Display */}
             {gameState.lastCalledNumber !== null && (
-              <div className="text-center mb-4">
-                <p className="text-xs text-gray-600 mb-2">Last Called</p>
-                <div className="w-16 h-16 bg-yellow-400 rounded flex items-center justify-center mx-auto">
-                  <span className="text-3xl font-bold text-white">{gameState.lastCalledNumber}</span>
+              <div className="text-center mb-6">
+                <p className="text-xs text-gray-500 mb-2 font-semibold">LAST CALLED</p>
+                <div className="w-24 h-24 bg-yellow-400 rounded-lg flex items-center justify-center mx-auto shadow-lg">
+                  <span className="text-5xl font-bold text-white">{gameState.lastCalledNumber}</span>
                 </div>
               </div>
             )}
 
+            {/* Number Pad */}
             {isCurrentPlayer && (
               <div>
-                <p className="text-xs text-gray-600 mb-2 text-center font-semibold">Call a Number</p>
-                <div className="grid grid-cols-5 gap-1">
+                <p className="text-xs text-gray-600 mb-3 text-center font-bold bg-blue-50 p-2 rounded">📱 PICK A NUMBER (1-25)</p>
+                <div className="grid grid-cols-5 gap-1.5">
                   {Array.from({ length: 25 }, (_, i) => i + 1).map((num) => (
                     <button
                       key={num}
                       onClick={() => handleCallNumber(num)}
                       disabled={calledNumbers.includes(num)}
-                      className={`h-8 rounded font-bold text-xs transition-all ${
+                      className={`h-10 rounded font-bold text-sm transition-all ${
                         calledNumbers.includes(num)
-                          ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                          : 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer'
+                          ? 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                          : 'bg-blue-500 text-white hover:bg-blue-600 cursor-pointer active:scale-95'
                       }`}
                     >
                       {num}
@@ -129,13 +132,10 @@ export default function GameBoard({ gameState, gameId, playerId }: GameBoardProp
                 </div>
               </div>
             )}
-          </div>
 
-          {/* Right Side - Hidden (Suspense!) */}
-          <div className="hidden lg:block bg-white rounded-lg shadow-lg p-4">
-            <p className="text-center text-gray-600 font-semibold">🤐</p>
-            <p className="text-center text-gray-500 text-sm mt-4">Their board is hidden...</p>
-            <p className="text-center text-gray-500 text-sm">Good luck! 🍀</p>
+            {!isCurrentPlayer && (
+              <p className="text-center text-gray-500 italic">Waiting for opponent...</p>
+            )}
           </div>
         </div>
       </div>
